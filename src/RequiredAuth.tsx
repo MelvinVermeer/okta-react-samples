@@ -1,9 +1,8 @@
 import { toRelativeUrl } from "@okta/okta-auth-js";
-import { Outlet } from "react-router-dom";
 import { useOktaAuth } from "@okta/okta-react";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
-export const RequiredAuth: React.FC = () => {
+export const RequiredAuth = ({ children }: { children: ReactNode }) => {
   const { oktaAuth, authState } = useOktaAuth();
 
   useEffect(() => {
@@ -25,5 +24,5 @@ export const RequiredAuth: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  return <Outlet />;
+  return children;
 };

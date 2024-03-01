@@ -12,11 +12,12 @@
   "dependencies": {
     "@okta/okta-auth-js": "^7.5.1",
     "@okta/okta-react": "^6.7.0",
+    "@tanstack/react-router": "^1.17.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "6.22.2"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@tanstack/router-vite-plugin": "^1.16.5",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
