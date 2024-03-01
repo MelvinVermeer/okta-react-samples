@@ -1,17 +1,14 @@
 import { OktaAuth, toRelativeUrl } from "@okta/okta-auth-js";
 
-import { Route, useHistory } from "react-router-dom";
-import {
-  Security,
-  SecureRoute,
-  LoginCallback,
-  useOktaAuth,
-} from "@okta/okta-react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { Security, LoginCallback, useOktaAuth } from "@okta/okta-react";
+import { RequiredAuth } from "./RequiredAuth";
 
 const oktaAuth = new OktaAuth({
   clientId: import.meta.env.VITE_CLIENT_ID,
   issuer: import.meta.env.VITE_ISSUER,
   redirectUri: window.location.origin + "/callback",
+  pkce: true,
 });
 
 const Home = () => <h1>Home</h1>;
@@ -27,16 +24,22 @@ const Protected = () => {
 };
 
 function App() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const restoreOriginalUri = async (_: OktaAuth, originalUri: string) => {
-    history.replace(toRelativeUrl(originalUri || "/", window.location.origin));
+    navigate(toRelativeUrl(originalUri || "/", window.location.origin), {
+      replace: true,
+    });
   };
 
   return (
     <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
-      <Route path="/" exact component={Home} />
-      <SecureRoute path="/protected" component={Protected} />
-      <Route path="/callback" component={LoginCallback} />
+      <Routes>
+        <Route path="/" Component={Home} />
+        <Route path="/protected" element={<RequiredAuth />}>
+          <Route path="" element={<Protected />} />
+        </Route>
+        <Route path="/callback" Component={LoginCallback} />
+      </Routes>
     </Security>
   );
 }
