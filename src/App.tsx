@@ -12,6 +12,7 @@ const oktaAuth = new OktaAuth({
   clientId: import.meta.env.VITE_CLIENT_ID,
   issuer: import.meta.env.VITE_ISSUER,
   redirectUri: window.location.origin + "/callback",
+  pkce: true,
 });
 
 const Home = () => <h1>Home</h1>;
