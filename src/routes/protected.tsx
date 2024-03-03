@@ -4,6 +4,7 @@ import { Logout } from "../components/Logout";
 
 export const Route = createFileRoute("/protected")({
   beforeLoad: ({ context, location }) => {
+    // In a real world scenario this would probably be a reusable function 'ensureAuthenticated'
     if (!context.auth.authState?.isAuthenticated) {
       throw redirect({
         to: "/login",
