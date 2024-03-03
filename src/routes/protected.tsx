@@ -1,17 +1,22 @@
 import { useOktaAuth } from "@okta/okta-react";
-import { createFileRoute } from "@tanstack/react-router";
-import { RequiredAuth } from "../RequiredAuth";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Logout } from "../components/Logout";
 
 export const Route = createFileRoute("/protected")({
-  component: () => (
-    <RequiredAuth>
-      <Protected />
-    </RequiredAuth>
-  ),
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.authState?.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
+  component: Protected,
 });
 
-const Protected = () => {
+function Protected() {
   const { authState } = useOktaAuth();
   return (
     <>
@@ -21,4 +26,4 @@ const Protected = () => {
       <pre>{JSON.stringify(authState?.idToken, null, 2)}</pre>
     </>
   );
-};
+}
