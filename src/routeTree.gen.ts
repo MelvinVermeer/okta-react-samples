@@ -13,8 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as ProtectedImport } from './routes/protected'
 import { Route as LoginImport } from './routes/login'
-import { Route as CallbackImport } from './routes/callback'
 import { Route as IndexImport } from './routes/index'
+import { Route as LoginCallbackImport } from './routes/login/callback'
 
 // Create/Update Routes
 
@@ -28,14 +28,14 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CallbackRoute = CallbackImport.update({
-  path: '/callback',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const LoginCallbackRoute = LoginCallbackImport.update({
+  path: '/callback',
+  getParentRoute: () => LoginRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -46,10 +46,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/callback': {
-      preLoaderRoute: typeof CallbackImport
-      parentRoute: typeof rootRoute
-    }
     '/login': {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
@@ -58,6 +54,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedImport
       parentRoute: typeof rootRoute
     }
+    '/login/callback': {
+      preLoaderRoute: typeof LoginCallbackImport
+      parentRoute: typeof LoginImport
+    }
   }
 }
 
@@ -65,8 +65,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  CallbackRoute,
-  LoginRoute,
+  LoginRoute.addChildren([LoginCallbackRoute]),
   ProtectedRoute,
 ])
 

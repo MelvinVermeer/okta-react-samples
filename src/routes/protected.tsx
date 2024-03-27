@@ -5,8 +5,8 @@ import { queryOptions } from "@tanstack/react-query";
 import { searchOrganizations } from "../searchOrganizations";
 
 export const Route = createFileRoute("/protected")({
-  loader: ({ context: { queryClient, auth } }) =>
-    queryClient.ensureQueryData(
+  loader: ({ context: { queryClient, auth } }) => {
+    return queryClient.ensureQueryData(
       queryOptions({
         queryKey: [
           "organizations",
@@ -21,7 +21,8 @@ export const Route = createFileRoute("/protected")({
             auth.authState?.accessToken?.claims["organizationIds"] as string[] // we ensure this is an array in the 'enabled' function
           ),
       })
-    ),
+    );
+  },
   beforeLoad: ({ context, location }) => {
     // In a real world scenario this would probably be a reusable function 'ensureAuthenticated'
     if (!context.auth.authState?.isAuthenticated) {
@@ -47,8 +48,10 @@ function Protected() {
 
       <h2>Organizations</h2>
       <ul>
-        {records.map(({ commercialName }) => (
-          <li key={commercialName}>{commercialName}</li>
+        {records.map(({ commercialName, rfhRegistrationNumber }) => (
+          <li key={commercialName}>
+            {commercialName} (Administratienummer :{rfhRegistrationNumber})
+          </li>
         ))}
       </ul>
     </>

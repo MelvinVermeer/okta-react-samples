@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const oktaAuth = new OktaAuth({
   clientId: import.meta.env.VITE_CLIENT_ID,
   issuer: import.meta.env.VITE_ISSUER,
-  redirectUri: window.location.origin + "/callback",
+  redirectUri: window.location.origin + "/login/callback",
   pkce: true,
   scopes: ["openid", "profile", "email", "role:app", "organization:read"],
 });

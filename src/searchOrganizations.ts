@@ -1,6 +1,7 @@
 export type OrganizationsResponse = {
   records: {
     commercialName: string;
+    rfhRegistrationNumber: string;
   }[];
 };
 
